@@ -10,4 +10,6 @@
     <string name="btnverimagen">Ver Imagen</string>
     <string name="btnactualizar">Actualizar Contacto</string>
     <string name="btnatras2">Atras</string>
+    <string name="btnatras3">Atras</string>
+    <string name="btnfoto">Foto</string>
 </resources>

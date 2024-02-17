@@ -19,12 +19,11 @@ public class Transaciones {
     public static final String nombre = "nombre";
     public static final String telefono = "telefono";
     public static final String nota = "nota";
-    public static final String foto = "foto";
+    public static final String uri_imagen = "uri_imagen";
 
     // DDL CREATE
     public static final String CreateTablePersonas = "CREATE TABLE " + Tablepersonas + "(" +
-            " id  INTEGER PRIMARY KEY AUTOINCREMENT ,  pais  TEXT, nombre  TEXT,  telefono  INTEGER, nota TEXT, " +
-            "foto BLOB)";
+            " id  INTEGER PRIMARY KEY AUTOINCREMENT ,  pais  TEXT, nombre  TEXT,  telefono  INTEGER, nota TEXT, uri_imagen TEXT)"; // Añadir la columna uri_imagen
 
     // DDL DROP
     public static final String DropTablePersonas = "DROP TABLE IF EXISTS " + Tablepersonas;
@@ -32,15 +31,6 @@ public class Transaciones {
     // DML
     public static final String SelectAllPersonas = "SELECT * FROM " + Tablepersonas;
 
-    // Método para convertir Bitmap a byte[]
-    public static byte[] bitmapToBytes(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
-    }
+    public static final String SelectUriImagen = "SELECT " + uri_imagen + " FROM " + Tablepersonas;
 
-    // Método para convertir byte[] a Bitmap
-    public static Bitmap bytesToBitmap(byte[] byteArray) {
-        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-    }
 }

@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,6 +24,7 @@ import com.example.pm1e12921.Configuracion.SQLiteConexion;
 import com.example.pm1e12921.Configuracion.Transaciones;
 import com.example.pm1e12921.Models.Personas;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class ActivitySalvados extends AppCompatActivity {
@@ -143,8 +146,33 @@ public class ActivitySalvados extends AppCompatActivity {
                 }
             }
         });
+
+
+        btnverimagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (posicionSeleccionada != -1) {
+                    Personas personaSeleccionada = Lista.get(posicionSeleccionada);
+                    long idSeleccionado = personaSeleccionada.getId();
+
+                    Intent intent = new Intent(ActivitySalvados.this, ActivityMostrarImagen.class);
+                    intent.putExtra("itemId", idSeleccionado);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Ninguna persona seleccionada", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
+
+    private Uri obtenerUriImagen(Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
+    }
     private void filtrarLista(String texto) {
         listaFiltrada.clear();
         if (texto.isEmpty()) {

@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     Button btnsalvar,btnsalvados,btnfoto;
 
-
+     Uri imageUri;
     String idPersona = "0";
 
     @Override
@@ -125,6 +125,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (notaString.isEmpty()) {
             showAlert("Debe escribir una nota");
             return;
+        } else if (imageView.getDrawable() == null) {
+            showAlert("Debe seleccionar una imagen");
+            return;
         } else {
             SQLiteConexion conexion = new SQLiteConexion(this, Transaciones.DBName, null, 1);
             SQLiteDatabase db = conexion.getWritableDatabase();
@@ -134,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             valores.put(Transaciones.nombre, nombre);
             valores.put(Transaciones.telefono, telefonoString);
             valores.put(Transaciones.nota, notaString);
+            valores.put(Transaciones.uri_imagen, imageUri.toString()); // Guardar la URI de la imagen
 
             Long resultado = db.insert(Transaciones.Tablepersonas, Transaciones.id, valores);
 
@@ -143,8 +147,11 @@ public class MainActivity extends AppCompatActivity {
             nombres.setText("");
             telefono.setText("");
             nota.setText("");
+            imageView.setImageDrawable(null);
         }
     }
+
+
 
     private void mostrarDialogo() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -222,11 +229,20 @@ public class MainActivity extends AppCompatActivity {
                 imageView.setImageBitmap(imagen);
 
                 guardarFotoEnGaleria(imagen);
+                imageUri = getImageUri(imagen);
             } else if (requestCode == seleccionar_foto) {
                 Uri path = data.getData();
                 imageView.setImageURI(path);
+                imageUri = path;
             }
         }
+    }
+
+    private Uri getImageUri(Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
     }
 
     private void showAlert(String message) {
@@ -272,4 +288,9 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Error al actualizar los datos", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
+
+
 }

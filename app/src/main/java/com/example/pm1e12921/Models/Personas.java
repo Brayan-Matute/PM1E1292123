@@ -1,5 +1,7 @@
 package com.example.pm1e12921.Models;
 
+import android.graphics.Bitmap;
+
 public class Personas {
     private Integer id;
     private String nombre;
